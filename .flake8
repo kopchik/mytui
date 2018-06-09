@@ -1,0 +1,4 @@
+[flake8]
+application-import-names = mytui
+import-order-style = pycharm
+#import-order-style = spoqa

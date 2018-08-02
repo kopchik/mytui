@@ -1,6 +1,7 @@
 #!/bin/env python3
 
 from blessings import Terminal
+
 from .utils import XY
 
 _terminal = Terminal()
@@ -29,14 +30,16 @@ class Canvas:
         for offset in range(len(self._canvas)):
             self._canvas[offset] = ord(ch)
 
-    def print(self, text, pos=XY(0, 0), err='ignore'):
+    def print(self, text, pos=XY(0, 0)):
         offset = pos.x + pos.y * self.size_x
         max_offset = len(self._canvas)
         for ch in text:
+            if ch == '\n':
+                curr_line = offset // self.size_x
+                offset = (curr_line + 1) * self.size_x
+                continue
             if offset >= max_offset:
-                if err == 'ignore':
-                    return
-                raise PositionError
+                return
             self._canvas[offset] = ord(ch)
             offset += 1
 

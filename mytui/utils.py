@@ -48,3 +48,36 @@ def loop(root, clear=True):
         #  continue
         if root.cur_focus:
             root.cur_focus.input(key)
+
+
+@functools.total_ordering
+class XY:
+    def __init__(self, x=0, y=0):
+        self.x = x
+        self.y = y
+
+    def __add__(self, other):
+        return self.__class__(self.x + other.x,
+                              self.y + other.y)
+
+    def __sub__(self, other):
+        return self.__class__(self.x - other.x,
+                              self.y - other.y)
+
+    def __gt__(self, other):
+        return self.x > other.x and self.y > other.y
+
+    def __ge__(self, other):
+        return self.x >= other.x and self.y >= other.y
+
+    def __eq__(self, other):
+        if not isinstance(other, self.__class__):
+            return False
+        return self.x == other.x and self.y == other.y
+
+    def __iter__(self):
+        return iter([self.x, self.y])
+
+    def __repr__(self):
+        cls = self.__class__.__name__
+        return "%s(%s, %s)" % (cls, self.x, self.y)

@@ -30,18 +30,21 @@ class Canvas:
         for offset in range(len(self._canvas)):
             self._canvas[offset] = ord(ch)
 
-    def print(self, text, pos=XY(0, 0)):
-        offset = pos.x + pos.y * self.size_x
-        max_offset = len(self._canvas)
-        for ch in text:
-            if ch == '\n':
-                curr_line = offset // self.size_x
-                offset = (curr_line + 1) * self.size_x
+    def print(self, text: str, pos: XY=XY(0, 0)):
+        lines = text.splitlines()
+        for y, line in enumerate(lines, pos.y):
+            if y < 0:
                 continue
-            if offset >= max_offset:
-                return
-            self._canvas[offset] = ord(ch)
-            offset += 1
+            if y > self.size_y:
+                break
+
+            for x, ch in enumerate(line, pos.x):
+                if x < 0:
+                    continue
+                if x >= self.size_x:
+                    break
+                offset = x + y * self.size_x
+                self._canvas[offset] = ord(ch)
 
     def as_string(self):
         lines = [l.decode() for l in self.iter_lines()]

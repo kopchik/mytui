@@ -1,7 +1,8 @@
 import pytest
 
 from mytui.canvas import Canvas
-from .conftest import multiline
+from mytui.utils import XY
+from conftest import multiline
 
 
 def test_clear():
@@ -18,14 +19,24 @@ def test_print_basic():
     assert "test " == canvas.as_string()
 
 
-def test_print_multiline():
+def test_print_multiline_with_position_and_overflow():
     canvas = Canvas(5, 4)
-    canvas.print("\ntest\ntest")
+    canvas.print("\ntestAAA\ntestYYY", pos=XY(1, 1))
     expected = multiline(
         "     ",
-        "test ",
-        "test ",
-        "     ")
+        "     ",
+        " test",
+        " test")
+    assert expected == canvas.as_string()
+
+
+def test_print_multiline_with_negative_position():
+    canvas = Canvas(3,3)
+    canvas.print("01234\n01234", pos=XY(-1, -1))
+    expected = multiline(
+        "123",
+        "   ",
+        "   ")
     assert expected == canvas.as_string()
 
 
